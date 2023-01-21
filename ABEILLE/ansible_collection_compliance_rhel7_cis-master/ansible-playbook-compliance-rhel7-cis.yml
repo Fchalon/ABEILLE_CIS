@@ -1,0 +1,52 @@
+- name: Running  RHEL CIS
+  hosts: RHEL8
+  become: yes
+  become_user: root
+  become_method: sudo
+#*************************************************************************
+#Extra Vars executed with -e 'hosts_allow_configured=${verified | unknown}'
+#*************************************************************************
+  pre_tasks:
+    - set_fact:
+        evar_hosts_allow_cfg: "disabled"
+        rhel7cis_rule_6_2_13: true
+  tasks:
+    - name: Set Variable For Run Execution On Rule 1.3.1 AIDE
+      set_fact:
+        rhel7cis_rule_1_3_1: false
+      when: ansible_check_mode|bool
+
+    - name: Set Variable For Run Execution On Rule 3.4.2
+      set_fact:
+        rhel7cis_rule_3_4_2: "false"
+      when:
+        evar_hosts_allow_cfg != "verified"
+
+    - name: Set Variable For Run Execution On Rule 3.4.3
+      set_fact:
+        rhel7cis_rule_3_4_3: "false"
+        rhel7cis_rule_5_5: "true"
+      when:
+        evar_hosts_allow_cfg != "verified"
+
+#*************************************************************************
+#Display Variable Settings
+#*************************************************************************
+
+    - name: Display Runtime Variable Changes Relating To Extra Variables
+      debug:
+           msg: >
+            "The Variable Setting For This Execution"
+            "Extra Vars Input hosts_allow_configured" {{ evar_hosts_allow_cfg }}
+            "Rule 3.4.2" {{ rhel7cis_rule_3_4_2 }}
+            "Rule 3.4.3" {{ rhel7cis_rule_3_4_3 }}
+
+    - name: Display Runtime Variable Changes Relating To Check Mode
+      debug:
+           msg: >
+            "The Variable Setting For This Execution"
+            "Check Mode"  {{ ansible_check_mode }}
+            "Rule 1.3.1" {{ rhel7cis_rule_1_3_1 }}
+
+  roles:
+    - { role: ansible-role-compliance-rhel7-cis}

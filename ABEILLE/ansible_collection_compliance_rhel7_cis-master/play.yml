@@ -1,0 +1,591 @@
+---
+- name: Remediation CIS security - Profile Server - Level 1
+  hosts: 10.0.2.14
+  become: yes
+  become_user: root
+  become_method: sudo
+
+  tasks:
+#*****************************************************************************************************************
+    - name: rule 1.1.1.1 | Ensure mounting of cramfs filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?install cramfs(\\s|$)"
+        line: "install cramfs /bin/false"
+        create: yes
+      when:
+        - rhel8_rule_1_1_1_1|bool
+      tags:
+        - rule_1.1.1.1
+        - level1
+        - cramfs
+#*****************************************************************************************************************
+
+    - name: rule 1.1.1.1 | Ensure mounting of cramfs filesystems is disabled
+      lineinfile:
+        dest: /etc/modprobe.d/CIS.conf
+        regexp: "^(#)?blacklist cramfs(\\s|$)"
+        line: "blacklist cramfs"
+        create: yes
+      when:
+        - rhel8_rule_1_1_1_1|bool
+      tags:
+        - rule_1.1.1.1
+        - level1
+        - cramfs
+#*****************************************************************************************************************
+    - name: "rule 1.1.1.1  Remove cramfs module"
+      modprobe:
+        name: cramfs
+        state: absent
+      register:  rhel7cis_rule_1_1_1_1b_out
+      when:
+        - rhel8_rule_1_1_1_1|bool
+      tags:
+        - level1
+        - rule_1.1.1.1
+        - cramfs
+#*****************************************************************************************************************
+    - name: check if /tmp is mounted on separate partition
+      shell: mount | grep  "on /tmp "| grep -v tmpfs
+      register: tmp_mount
+      changed_when: no
+      failed_when: no
+      tags:
+        - rule_1.1.2.1
+        - rule_1.1.2.2
+        - rule_1.1.2.3
+        - rule_1.1.2.4
+        - level1
+        - tmp
+#*****************************************************************************************************************
+    - name:  rule 1.1.2.2 Ensure nodev option set on /tmp partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/tmp)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nodev(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nodev \6'
+      when:
+          - tmp_mount.rc == 0
+          - rhel8_rule_1_1_2_2|bool
+      notify: remount tmp
+      tags:
+        - rule_1.1.2.1
+        - level1
+        - tmp
+#*****************************************************************************************************************
+
+
+    - name:  rule 1.1.2.3 Ensure noexec option set on /tmp partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/tmp)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?noexec(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,noexec \6'
+      when:
+          - tmp_mount.rc == 0
+          - rhel8_rule_1_1_2_3|bool
+      notify: remount tmp
+      tags:
+        - rule_1.1.2.2
+        - rule_1.1.2.3
+        - rule_1.1.2.4
+        - level1
+        - tmp
+#*****************************************************************************************************************
+
+    - name:  rule 1.1.2.4 Ensure nosuid option set on /tmp partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/tmp)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nosuid(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nosuid\6'
+      when:
+          - tmp_mount.rc == 0
+          - rhel8_rule_1_1_2_4|bool
+      notify: remount tmp
+      tags:
+        - rule_1.1.2.2
+        - rule_1.1.2.3
+        - rule_1.1.2.4
+        - level1
+        - tmp
+#*****************************************************************************************************************
+
+    - name : rule 1.1.2.1 | Ensure separate partition exists for /tmp | enable tmp.mount
+      systemd:
+        name: tmp.mount
+        daemon_reload: yes
+        enabled: yes
+        masked: no
+        state: started
+      when:
+          - tmp_mount.rc != 0
+          - rhel8_rule_1_1_2_1|bool
+      tags:
+        - rule_1.1.2.1
+        - level1
+        - tmp
+#*****************************************************************************************************************
+    - name : rule 1.1.2.2|1.1.2.3|1.1.2.4| Ensure nodev, nosuid, noexec options set on /tmp
+      copy:
+        src: files/tmp.mount
+        dest: /etc/systemd/system/tmp.mount
+        owner: root
+        group: root
+        mode: 0644
+      notify: restart tmp.mount
+      when:
+          - tmp_mount.rc != 0
+          - rhel8_rule_1_1_2_2|bool
+          - rhel8_rule_1_1_2_3|bool
+          - rhel8_rule_1_1_2_4|bool
+      tags:
+        - rule_1.1.2.2
+        - rule_1.1.2.3
+        - rule_1.1.2.4
+        - level1
+        - tmp
+#*****************************************************************************************************************
+    - name: check if /var is mounted on separate partition
+      shell: mount | grep  "on /var "
+      register: var_mount
+      changed_when: no
+      failed_when: no
+      tags:
+        - rule_1.1.3.2
+        - rule_1.1.3.3
+        - rule_1.1.3.4
+        - level1
+        - var
+
+#*****************************************************************************************************************
+    - name:  rule 1.1.3.2 Ensure nodev option set on /var partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nodev(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nodev \6'
+      when: 
+          - var_mount.rc == 0
+      notify: remount var
+      tags:
+        - rule_1.1.3.2
+        - level1
+        - var
+#*****************************************************************************************************************
+
+
+    - name:  rule 1.1.3.3 Ensure noexec option set on /var partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?noexec(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,noexec \6'
+      when: 
+          - var_mount.rc == 0
+      notify: remount var
+      tags:
+        - rule_1.1.3.2
+        - rule_1.1.3.3
+        - rule_1.1.3.4
+        - level1
+        - var
+#*****************************************************************************************************************
+
+    - name:  rule 1.1.3.4 Ensure nosuid option set on /var partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nosuid(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nosuid\6'
+      when:
+          - var_mount.rc == 0
+      notify: remount var
+      tags:
+        - rule_1.1.3.2
+        - rule_1.1.3.3
+        - rule_1.1.3.4
+        - level1
+        - var
+#*****************************************************************************************************************
+    - name: check if /var/tmp is mounted on separate partition
+      shell: mount | grep  "on /var/tmp "
+      register: vartmp_mount
+      changed_when: no
+      failed_when: no
+      tags:
+        - rule_1.1.4.2
+        - rule_1.1.4.3
+        - rule_1.1.4.4
+        - level1
+        - varlog
+
+#*****************************************************************************************************************
+    - name:  rule 1.1.4.2 Ensure nodev option set on /var/tmp partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/tmp)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nodev(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nodev \6'
+      when:
+          - vartmp_mount.rc == 0
+      notify: remount vartmp
+      tags:
+        - rule_1.1.4.2
+        - level1
+        - varlog
+#*****************************************************************************************************************
+
+
+    - name:  rule 1.1.4.3 Ensure noexec option set on /var/tmp partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/tmp)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?noexec(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,noexec \6'
+      when:
+          - vartmp_mount.rc == 0
+      notify: remount vartmp
+      tags:
+        - rule_1.1.4.2
+        - rule_1.1.4.3
+        - rule_1.1.4.4
+        - level1
+        - varlog
+#*****************************************************************************************************************
+
+    - name:  rule 1.1.4.4 Ensure nosuid option set on /var/tmp partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/tmp)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nosuid(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nosuid\6'
+      when:
+          - vartmp_mount.rc == 0
+      notify: remount vartmp
+      tags:
+        - rule_1.1.4.2
+        - rule_1.1.4.3
+        - rule_1.1.4.4
+        - level1
+        - varlog
+#*****************************************************************************************************************
+    - name: check if /var/log is mounted on separate partition
+      shell: mount | grep  "on /var/log "
+      register: varlog_mount
+      changed_when: no
+      failed_when: no
+      tags:
+        - rule_1.1.5.2
+        - rule_1.1.5.3
+        - rule_1.1.5.4
+        - level1
+        - varlog
+
+#*****************************************************************************************************************
+    - name:  rule 1.1.5.2 Ensure nodev option set on /var/log partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/log)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nodev(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nodev \6'
+      when:
+          - varlog_mount.rc == 0
+      notify: remount varlog
+      tags:
+        - rule_1.1.5.2
+        - level1
+        - varlog
+#*****************************************************************************************************************
+
+
+    - name:  rule 1.1.5.3 Ensure noexec option set on /var/log partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/log)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?noexec(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,noexec \6'
+      when:
+          - varlog_mount.rc == 0
+      notify: remount varlog
+      tags:
+        - rule_1.1.5.2
+        - rule_1.1.5.3
+        - rule_1.1.5.4
+        - level1
+        - varlog
+#*****************************************************************************************************************
+
+    - name:  rule 1.1.5.4 Ensure nosuid option set on /var/log partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/log)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nosuid(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nosuid\6'
+      when:
+          - varlog_mount.rc == 0
+      notify: remount varlog
+      tags:
+        - rule_1.1.5.2
+        - rule_1.1.5.3
+        - rule_1.1.5.4
+        - level1
+        - varlog
+#*****************************************************************************************************************
+#*****************************************************************************************************************
+    - name: check if /var/log/audit is mounted on separate partition
+      shell: mount | grep  "on /var/log/audit "
+      register: varlogaudit_mount
+      changed_when: no
+      failed_when: no
+      tags:
+        - rule_1.1.6.2
+        - rule_1.1.6.3
+        - rule_1.1.6.4
+        - level1
+        - varlogaudit
+
+#*****************************************************************************************************************
+    - name:  rule 1.1.6.2 Ensure noexec option set on /var/log/audit partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/log/audit)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?noexec(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,noexec \6'
+      when:
+          - varlogaudit_mount.rc == 0
+          - rhel8_rule_1_1_6_2|bool
+      notify: remount varlogaudit
+      tags:
+        - rule_1.1.6.2
+        - level1
+        - varlogaudit
+#*****************************************************************************************************************
+    - name:  rule 1.1.6.3 Ensure nodev option set on /var/log/audit partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/log/audit)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nodev(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nodev \6'
+      when:
+          - varlogaudit_mount.rc == 0
+          - rhel8_rule_1_1_6_3|bool
+      notify: remount varlogaudit
+      tags:
+        - rule_1.1.6.3
+        - level1
+        - varlogaudit
+#*****************************************************************************************************************
+    - name:  rule 1.1.6.4 Ensure nosuid option set on /var/log/audit partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/var/log/audit)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nosuid(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nosuid \6'
+      when:
+          - varlogaudit_mount.rc == 0
+          - rhel8_rule_1_1_6_4|bool
+      notify: remount varlogaudit
+      tags:
+        - rule_1.1.6.4
+        - level1
+        - varlogaudit
+#*****************************************************************************************************************
+    - name: check if /home is mounted on separate partition
+      shell: mount | grep  "on /home "
+      register: home_mount
+      changed_when: no
+      failed_when: no
+
+      tags:
+        - rule_1.1.7.2
+        - rule_1.1.7.3
+        - rule_1.1.7.4
+        - level1
+        - home
+
+#*****************************************************************************************************************
+    - name:  rule 1.1.7.2 Ensure noexec option set on /home partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/home)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?noexec(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,noexec \6'
+      when:
+          - home_mount.rc == 0
+          - rhel8_rule_1_1_7_2|bool
+      notify: remount home
+      tags:
+        - rule_1.1.7.2
+        - level1
+        - home
+#*****************************************************************************************************************
+    - name:  rule 1.1.7.3 Ensure nodev option set on /home partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/home)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nodev(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nodev \6'
+      when:
+          - home_mount.rc == 0
+          - rhel8_rule_1_1_7_3|bool
+      notify: remount home
+      tags:
+        - rule_1.1.7.3
+        - level1
+        - home
+#*****************************************************************************************************************
+    - name:  rule 1.1.7.4 Ensure nosuid option set on /home partition
+      replace:
+        path: /etc/fstab
+        backup: yes
+        regexp: '^(\S+\s+)(\/home)(\s+)((?:ext4|xfs)\s+)(?!(?:\S*,)?nosuid(?:,\S*)?\s+)(\S+)(\s+.+)$'
+        replace: '\1\2 \4 \5,nosuid \6'
+      when:
+          - home_mount.rc == 0
+          - rhel8_rule_1_1_7_4|bool
+      notify: remount home
+      tags:
+        - rule_1.1.7.4
+        - level1
+        - home
+#*****************************************************************************************************************
+    - name: rule 1.1.8.1  Ensure nodev option set on /dev/shm partition\n
+            rule 1.1.8.2 Ensure nosuid option set on /dev/shm partition\n
+            rule 1.1.8.3 Ensure noexec option set on /dev/shm partition"
+      mount:
+        name: /dev/shm
+        src: tmpfs
+        state: mounted
+        fstype: tmpfs
+        opts: "defaults,nodev,nosuid,noexec"
+      when:
+          - rhel8_rule_1_1_8_1|bool
+          - rhel8_rule_1_1_8_2|bool
+          - rhel8_rule_1_1_8_3|bool
+      notify: remount shm
+      tags:
+        - level1
+        - rule_1.1.8.1
+        - rule_1.1.8.2
+        - rule_1.1.8.3
+
+#*****************************************************************************************************************
+    - name: rule 1.1.10 | Ensure disable USB Storage
+      lineinfile:
+        dest: /etc/modprobe.d/usb_storage.conf
+        regexp: "^(#)?install usb-storage(\\s|$)"
+        line: "install usb-storage /bin/false"
+        create: yes
+      when:
+        - rhel8_rule_1_1_10|bool
+      tags:
+        - rule_1.1.10
+        - level1
+        - usb_storage
+#*****************************************************************************************************************
+    - name: "rule 1.1.10 | Ensure disable USB Storage"
+      modprobe:
+        name: usb-storage
+        state: absent
+      when:
+        - rhel8_rule_1_1_10|bool
+      tags:
+        - level1
+        - rule_1.1.10
+        - usb-storage
+#*****************************************************************************************************************
+    - name : rule 1.2.3 | Ensure gpgcheck is globally activated
+      replace:
+        name: /etc/yum.conf
+        regexp: "^gpgcheck=0"
+        replace: "gpgcheck=1"
+      when:
+        -  rhel8_rule_1_2_3|bool
+      tags:
+        - level1
+        - rule_1.2.3
+        - gpgcheck
+
+#*****************************************************************************************************************
+    - name : rule 1.3.1 Ensure AIDE is installed
+      yum:
+        name: aide
+        state: present
+      when:
+        -  rhel8_rule_1_3_1|bool
+      tags:
+        - level1
+        - rule_1.3.1
+        - aide
+#*****************************************************************************************************************
+    - name : rule 1.3.1 | create aide DB and add crontab
+      shell: "aide --init"
+      register: aideinit
+      when:
+        -  rhel8_rule_1_3_1|bool
+      tags:
+        - level1
+        - rule_1.3.1
+        - aide
+
+#*****************************************************************************************************************
+    - name : rule 1.3.1 | create aide DB and add crontab
+      copy:
+        remote_src: true
+        src: /var/lib/aide/aide.db.new.gz
+        dest: /var/lib/aide/aide.db.gz
+        owner: root
+        group: root
+        mode: 0600
+      when:
+        - rhel8_rule_1_3_1|bool
+        - aideinit.rc == 0
+      tags:
+        - level1
+        - rule_1.3.1
+        - aide
+#*****************************************************************************************************************
+
+
+
+
+
+  handlers:
+    - name: restart tmp.mount
+      systemd:
+        name: tmp.mount
+        daemon_reload: yes
+        enabled: yes
+        masked: no
+        state: reloaded
+    - name: remount var
+      mount : 
+        path: /var
+        state: remounted
+    - name: remount varlog
+      mount : 
+        path: /var/log
+        state: remounted
+    - name: remount vartmp
+      mount : 
+        path: /var/tmp
+        state: remounted
+
+    - name: remount tmp
+      mount : 
+        path: /var/tmp
+        state: remounted
+    - name: remount varlogaudit
+      mount : 
+        path: /var/log/audit
+        state: remounted
+    - name: remount home
+      mount : 
+        path: /home
+        state: remounted
+    - name: remount shm
+      mount : 
+        path: /dev/shm
+        state: remounted

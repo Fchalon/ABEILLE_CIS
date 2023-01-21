@@ -1,0 +1,1678 @@
+- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_1|bool
+      - not ansible_check_mode
+  tags:
+      - level2
+      - patch
+      - rule_6.1.1
+      - notimplemented
+#***********************************************************************************************
+- name: "NOTSCORED | 6.1.1 | PATCH | Audit system file permissions"
+  shell: |
+      grep "^\s*linux" /boot/grub2/grub.cfg | grep 'selinux=0|enforcing=0'
+  register: rhel7cis_rule_6_1_1_out
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_6_1_1|bool
+  tags:
+    - level2
+    - patch
+    - rule_6.1.1
+    - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.1 | Check Compliant
+  block:
+    - name: Display Output | 6.1.1 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.1.1 |Verify  no unowned files or directories exist|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_1_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_1_out.stdout | length > 0 ) or (rhel7cis_rule_6_1_1_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.1.1 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.1 |Verify  no unowned files or directories exist|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_1_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_1_out.stdout | length == 0) and (rhel7cis_rule_6_1_1_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_6_1_1|bool
+  tags:
+    - level1
+    - level2
+    - patch
+    - rule_6.1.1
+    - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.2 | PATCH | Ensure permissions on /etc/passwd are configured"
+  file:
+      dest: /etc/passwd
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - rhel7cis_rule_6_1_2|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.2
+#***********************************************************************************************
+- name: "SCORED | 6.1.2 | PATCH | Verify  permissions on /etc/passwd are configured"
+  stat:
+      path: /etc/passwd
+  register: rhel7cis_rule_6_1_2_out
+  when:
+      - rhel7cis_rule_6_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.2
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.2 | Check Compliant
+  block:
+    - name: Display Output | 6.1.2 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.2 |Permissions On /etc/passwd Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_2_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_2_out.stat.mode != '0644'
+    
+    - name: Display Output | 6.1.2 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.2 |Permissions On /etc/passwd Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_2_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_2_out.stat.mode == '0644'
+  when:
+      - rhel7cis_rule_6_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.2
+      - customcheck
+  check_mode: no
+#**********************************************************************************************
+- name: "SCORED | 6.1.3 | PATCH | Ensure permissions on /etc/shadow are configured"
+  file:
+      dest: /etc/shadow
+      owner: root
+      group: root
+      mode: 0000
+  when:
+      - rhel7cis_rule_6_1_3|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.3
+#***********************************************************************************************
+- name: "SCORED | 6.1.3 | PATCH | Verify  permissions on /etc/shadow are configured"
+  stat:
+      path: /etc/shadow
+  register: rhel7cis_rule_6_1_3_out
+  when:
+      - rhel7cis_rule_6_1_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.3
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.3 | Check Compliant
+  block:
+    - name: Display Output | 6.1.3 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.3 |Permissions On /etc/shadow Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_3_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_3_out.stat.mode != '0000'
+    
+    - name: Display Output | 6.1.3 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.3 |Permissions On /etc/shadow Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_3_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_3_out.stat.mode == '0000'
+  when:
+      - rhel7cis_rule_6_1_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.3
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.4 | PATCH | Ensure permissions on /etc/group are configured"
+  file:
+      dest: /etc/group
+      owner: root
+      group: root
+      mode: 0644
+  when:
+      - rhel7cis_rule_6_1_4|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.4
+#*********************************************************************
+- name: "SCORED | 6.1.4 | PATCH | Verify  permissions on /etc/group are configured"
+  stat:
+      path: /etc/group
+  register: rhel7cis_rule_6_1_4_out
+  when:
+      - rhel7cis_rule_6_1_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.4
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.4 | Check Compliant
+  block:
+    - name: Display Output | 6.1.4 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.4 |Permissions On /etc/group Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_4_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_4_out.stat.mode != '0644'
+    
+    - name: Display Output | 6.1.4 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.4 |Permissions On /etc/group Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_4_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_4_out.stat.mode == '0644'
+  when:
+      - rhel7cis_rule_6_1_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.4
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.5 | PATCH | Ensure permissions on /etc/gshadow are configured"
+  file:
+      dest: /etc/gshadow
+      owner: root
+      group: root
+      mode: 0000
+  when:
+      - rhel7cis_rule_6_1_5|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.5
+#***********************************************************************************************
+- name: "SCORED | 6.1.5 | PATCH | Verify permissions on /etc/gshadow are configured"
+  stat:
+      path: /etc/gshadow
+  register: rhel7cis_rule_6_1_5_out
+  when:
+      - rhel7cis_rule_6_1_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.5
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.5 | Check Compliant
+  block:
+    - name: Display Output | 6.1.5 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.5 |Permissions On /etc/gshadow Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_5_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_5_out.stat.mode != '0000'
+    
+    - name: Display Output | 6.1.5 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.5 |Permissions On /etc/gshadow Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_5_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_5_out.stat.mode == '0000'
+  when:
+      - rhel7cis_rule_6_1_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.5
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.6 | PATCH | Ensure permissions on /etc/passwd- are configured"
+  file:
+      dest: /etc/passwd-
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_6_1_6|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.6
+#***********************************************************************************************
+- name: "SCORED | 6.1.6 | PATCH | Verify permissions on /etc/passwd- are configured"
+  stat:
+      path: /etc/passwd-
+  register: rhel7cis_rule_6_1_6_out
+  when:
+      - rhel7cis_rule_6_1_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.6
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.6 | Check Compliant
+  block:
+    - name: Display Output | 6.1.6 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.6 |Permissions On /etc/passwd- Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_6_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_6_out.stat.mode != '0600'
+    
+    - name: Display Output | 6.1.6 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.6 |Permissions On /etc/passwd- Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_6_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_6_out.stat.mode == '0600'
+  when:
+      - rhel7cis_rule_6_1_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.6
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.7 | PATCH | Ensure permissions on /etc/shadow- are configured"
+  file:
+      dest: /etc/shadow-
+      owner: root
+      group: root
+      mode: 0000
+  when:
+      - rhel7cis_rule_6_1_7|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.7
+#***********************************************************************************************
+- name: "SCORED | 6.1.7 | PATCH | Verify  permissions on /etc/shadow- are configured"
+
+  stat:
+      path: /etc/shadow-
+  register: rhel7cis_rule_6_1_7_out
+  when:
+      - rhel7cis_rule_6_1_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.7
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.7 | Check Compliant
+  block:
+    - name: Display Output | 6.1.7 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.7 |Permissions On /etc/shadow- Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_7_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_7_out.stat.mode != '0000'
+      
+    - name: Display Output | 6.1.7 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.7 |Permissions On /etc/shadow- Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_7_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_7_out.stat.mode == '0000'
+  when:
+      - rhel7cis_rule_6_1_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.7
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.8 | PATCH | Ensure permissions on /etc/group- are configured"
+  file:
+      dest: /etc/group-
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_6_1_8|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.8
+#***********************************************************************************************
+- name: "SCORED | 6.1.8 | PATCH | Ensure permissions on /etc/group- are configured"
+
+  stat:
+      path: /etc/group-
+  register: rhel7cis_rule_6_1_8_out
+  when:
+      - rhel7cis_rule_6_1_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.8
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.8 | Check Compliant
+  block:
+    - name: Display Output | 6.1.8 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.8 |Permissions On /etc/group- Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_8_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_8_out.stat.mode != '0600'
+    
+    - name: Display Output | 6.1.8 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.8 |Permissions On /etc/group- Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_8_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_8_out.stat.mode == '0600'
+  when:
+      - rhel7cis_rule_6_1_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.8
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow- are configured"
+  file:
+      dest: /etc/gshadow-
+      owner: root
+      group: root
+      mode: 0600
+  when:
+      - rhel7cis_rule_6_1_9|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.9
+#***********************************************************************************************
+- name: "SCORED | 6.1.9 | PATCH | Ensure permissions on /etc/gshadow- are configured"
+
+  stat:
+    path: /etc/gshadow-
+  register: rhel7cis_rule_6_1_9_out
+  when:
+      - rhel7cis_rule_6_1_9|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.9
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.9 | Check Compliant
+  block:
+    - name: Display Output | 6.1.9 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.1.9 |Permissions On /etc/gshadow- Configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_9_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_9_out.stat.mode != '0600'
+      
+    - name: Display Output | 6.1.9 | When Compliant
+      debug:  
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.9 |Permissions On /etc/gshadow- Cofigured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_9_out.stat.mode}}"
+      when: 
+          - rhel7cis_rule_6_1_9_out.stat.mode == '0600'
+  when:
+      - rhel7cis_rule_6_1_9|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.9
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.10 | PATCH | Ensure no world writable files exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_10|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.10
+      - notimplemented
+#***********************************************************************************************
+- name: Display Output | 6.1.10 | | PATCH | Verify no world writable files exist"
+  debug: 
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 6.1.10 |no world writable files exist|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_6_1_10|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.10
+      - notimplemented
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.11 | PATCH | Ensure no unowned files or directories exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_11|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.1.11 | PATCH | Verify  no unowned files or directories exist"
+  shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nouser -ls"
+  register: rhel7cis_rule_6_1_11_out
+  changed_when: no
+  when:
+    - rhel7cis_rule_6_1_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.11 | Check Compliant
+  block:
+    - name: Display Output | 6.1.11 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.1.11 |Verify  no unowned files or directories exist|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_11_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_11_out.stdout | length > 0 ) or (rhel7cis_rule_6_1_11_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.1.11 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.11 |Verify  no unowned files or directories exist|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_11_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_11_out.stdout | length == 0) and (rhel7cis_rule_6_1_11_out.stderr | length == 0 )
+  when:
+    - rhel7cis_rule_6_1_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.1.12 | PATCH | Ensure no ungrouped files or directories exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_12|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.12
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.1.12 | Verify no ungrouped files or directories exist"
+  shell: "df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -nogroup -ls"
+  register: rhel7cis_rule_6_1_12_out
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.12 | When Not Compliant
+  block:
+    - name: Display Output | 6.1.12 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.1.12 |Root Is The Only UID 0 Account|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_12_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_12_out.stdout | length > 0 ) or (rhel7cis_rule_6_1_12_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.1.12 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.12 |Root Is The Only UID 0 Account|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_12_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_12_out.stdout | length == 0) and (rhel7cis_rule_6_1_12_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_6_1_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.11
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "NOTSCORED | 6.1.13 | PATCH | Audit SUID executables"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_13|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.13
+      - notimplemented
+#***********************************************************************************************
+- name: "NOTSCORED | 6.1.13 | PATCH | Verify Audit SUID executables"
+  shell: find / -xdev \( -perm -4000 \) -type f ! -path '/proc/*' -print 2>/dev/null
+  register: rhel7cis_rule_6_1_13_out
+  changed_when: no
+  when:
+    - rhel7cis_rule_6_1_13|bool
+  tags:
+    - level1
+    - level2
+    - patch
+    - rule_6.1.13
+    - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.13 | Check Compliant
+  block:
+    - name: Display Output | 6.1.13 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.1.13 |Verify Audit SUID executables|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_13_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_13_out.stdout | length > 0 ) or (rhel7cis_rule_6_1_13_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.1.13 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.13 |Verify Audit SUID executables|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_1_13_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_13_out.stdout | length == 0) and (rhel7cis_rule_6_1_13_out.stderr | length == 0 )
+  when:
+    - rhel7cis_rule_6_1_13|bool
+  tags:
+    - level1
+    - level2
+    - patch
+    - rule_6.1.13
+    - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "NOTSCORED | 6.1.14 | PATCH | Audit SGID executables"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_14|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.14
+      - notimplemented
+#***********************************************************************************************
+- name: "NOTSCORED | 6.1.14 | PATCH | Verify Audit SGID executables"
+  shell: find / -xdev \( -perm -2000 \) -type f ! -path '/proc/*' -print 2>/dev/null
+  register: rhel7cis_rule_6_1_14_out
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_1_14|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.14
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.1.14 | Check Compliant
+  block:
+    - name: Display Output | 6.1.14 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.1.14 |Verify Audit SGID executables|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_1_14_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_14_out.stdout | length > 0 ) or (rhel7cis_rule_6_1_14_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.1.14 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.1.14 |Verify Audit SGID executables|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_1_1_14_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_1_14_out.stdout | length == 0) and (rhel7cis_rule_6_1_14_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_6_1_14|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.1.14
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.1 | PATCH | Ensure password fields are not empty"
+  command: passwd -l {{ item }}
+  changed_when: no
+  failed_when: no
+  with_items: "{{ empty_password_accounts.stdout_lines }}"
+  when:
+      - empty_password_accounts.rc
+      - rhel7cis_rule_6_2_1|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.1
+#***********************************************************************************************
+#- name: "SCORED | 6.2.1 | PATCH | Verify password fields are not empty"
+
+- name: Display Output | 6.2.1 | Check Compliant
+  block:
+    - name: Display Output | 6.2.1 | When Not Compliant
+      debug:  
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.1 |Password Fields Are Not Empty|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{empty_password_accounts.stdout_lines}}"
+      when: 
+          - empty_password_accounts.rc != 0 
+    - name: Display Output | 6.2.1 | When Compliant
+      debug:  
+            msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.1 |Password Fields Are Not Empty|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{empty_password_accounts.stderr_lines}}"
+      when: 
+          - empty_password_accounts.rc == 0
+  when:
+      - rhel7cis_rule_6_2_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.1
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.2 | PATCH | Ensure no legacy '+' entries exist in /etc/passwd"
+  command: sed -i '/^+/ d' /etc/passwd
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_6_2_2|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.2
+      - skip_ansible_lint #  ANSIBLE0006
+#***********************************************************************************************
+- name: "SCORED | 6.2.2 | PATCH | Verify no legacy '+' entries exist in /etc/passwd"
+  shell: /bin/grep '^+:' /etc/passwd
+  register: rhel7cis_rule_6_2_2_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_2_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.2
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.2 | Check Compliant
+  block:
+    - name: Display Output | 6.2.2 | When Not Compliant
+      debug: 
+            msg="NOT_COMPLIANT|CIS_RESULT| 6.2.2 |No Leacy + Entries Exist In /etc/passwd|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_2_out.stdout_lines}}"
+      when: rhel7cis_rule_6_2_2_out.rc == 0
+    
+    - name: Display Output | 6.2.2 | When Compliant
+      debug: 
+            msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.2 |No Leacy + Entries Exist In /etc/passwd|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_2_out.stdout_lines}}"
+      when: rhel7cis_rule_6_2_2_out.rc != 0
+  when:
+      - rhel7cis_rule_6_2_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.2
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+#***********************************************************************************************
+- name: "SCORED | 6.2.3 | PATCH | Ensure no legacy '+' entries exist in /etc/shadow"
+  command: sed -i '/^+/ d' /etc/shadow
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_6_2_3|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.3
+      - skip_ansible_lint #  ANSIBLE0006
+#***********************************************************************************************
+- name: "SCORED | 6.2.3 | PATCH | Verify no legacy '+' entries exist in /etc/shadow"
+  shell: /bin/grep '^+:' /etc/shadow
+  register: rhel7cis_rule_6_2_3_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_3_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.3
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.3 | Check Compliant
+  block:
+    - name: Display Output | 6.2.3 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.3 |No Leacy + Entries Exist In /etc/shadow|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_3_out.stdout_lines}}"
+      when: rhel7cis_rule_6_2_3_out.rc == 0
+    
+    - name: Display Output | 6.2.3 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.3 |No Leacy + Entries Exist In /etc/shadow|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_3_out.stdout_lines}}"
+      when: rhel7cis_rule_6_2_3_out.rc != 0
+  when:
+      - rhel7cis_rule_6_2_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.3
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
+  command: sed -i '/^+/ d' /etc/group
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_6_2_4|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.4
+      - skip_ansible_lint #  ANSIBLE0006
+#***********************************************************************************************
+- name: "SCORED | 6.2.4 | PATCH | Ensure no legacy '+' entries exist in /etc/group"
+  shell: /bin/grep '^+:' /etc/group
+  register: rhel7cis_rule_6_2_4_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_4_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.4
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.4 | Check Compliant
+  block:
+    - name: Display Output | 6.2.4 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.4 |No Leacy + Entries Exist In /etc/group|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_4_out.stdout_lines}}"
+      when: rhel7cis_rule_6_2_4_out.rc == 0
+    
+    - name: Display Output | 6.2.4 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.4 |No Leacy + Entries Exist In /etc/group|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_4_out.stdout_lines}}"
+      when: rhel7cis_rule_6_2_4_out.rc != 0
+  when:
+      - rhel7cis_rule_6_2_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.4
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.5 | PATCH | Ensure root is the only UID 0 account"
+  command: passwd -l {{ item }}
+  changed_when: no
+  failed_when: no
+  with_items: "{{ uid_zero_accounts_except_root.stdout_lines }}"
+  when:
+      - uid_zero_accounts_except_root.rc
+      - rhel7cis_rule_6_2_5|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.5
+#***********************************************************************************************
+- name: "SCORED | 6.2.5 | PATCH | Verify root is the only UID 0 account"
+  shell: /bin/awk -F':' '($3 == 0) { print $1 }' /etc/passwd | grep -qx 'root' 
+  register: rhel7cis_rule_6_2_5_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_5_out.stderr"
+  when:
+    - rhel7cis_rule_6_2_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.5
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.5 | Check Compliant
+  block:
+    - name: Display Output | 6.2.5 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.2.5 |Root Is The Only UID 0 Account|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_5_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_5_out.stdout | length > 0 ) or (rhel7cis_rule_6_2_5_out.stderr | length > 0 )
+
+    - name: Display Output | 6.2.5 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.5 |Root Is The Only UID 0 Account|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_5_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_5_out.stdout | length == 0) and (rhel7cis_rule_6_2_5_out.stderr | length == 0 )
+  when:
+    - rhel7cis_rule_6_2_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.5
+      - skip_ansible_lint #  ANSIBLE0006
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.6 | PATCH | Verify root PATH Integrity"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.6
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.6 | PATCH | Verify root PATH Integrity"
+  shell: |
+      if [ "`echo $PATH | grep ::`" != "" ]; then
+        echo "Empty Directory in PATH (::)"
+      fi
+      if [ "`echo $PATH | grep :$`" != "" ]; then
+        echo "Trailing : in PATH"
+      fi
+      p=`echo $PATH | sed -e 's/::/:/' -e 's/:$//' -e 's/:/ /g'`
+      set -- $p
+      while [ "$1" != "" ]; do
+        if [ "$1" = "." ]; then
+          echo "PATH contains ."
+          shift
+          continue
+      fi
+      if [ -d $1 ]; then
+        dirperm=`ls -ldH $1 | cut -f1 -d" "`
+        if [ `echo $dirperm | cut -c6` != "-" ]; then
+          echo "Group Write permission set on directory $1"
+        fi
+        if [ `echo $dirperm | cut -c9` != "-" ]; then
+          echo "Other Write permission set on directory $1"
+        fi
+        dirown=`ls -ldH $1 | awk '{print $3}'`
+        if [ "$dirown" != "root" ] ; then
+          echo $1 is not owned by root
+        fi
+      else
+        echo $1 is not a directory
+      fi
+      shift
+      done
+
+  register: rhel7cis_rule_6_2_6_out
+  failed_when: no
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.6
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.6 | Check Compliant
+  block:
+    - name: Display Output | 6.2.6 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.2.6 |root PATH Integrity|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_6_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_6_out.stdout | length > 0 ) or (rhel7cis_rule_6_2_6_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.2.6 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.6 |root PATH Integrity|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_6_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_6_out.stdout | length == 0) and (rhel7cis_rule_6_2_6_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_6_2_6|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.6
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.7 | PATCH | Ensure all users' home directories exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_7|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.7
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.2.7 | PATCH | Verify all users' home directories exist"
+  shell: |
+      cat /etc/passwd | awk -F: '{ print $1 " " $3 " " $6 }' | while read user uid dir; do
+        if [ $uid -ge 1000 -a ! -d "$dir" -a $user != "nfsnobody" ]; then
+          echo "The home directory ($dir) of user $user does not exist."
+        fi
+      done
+  register: rhel7cis_rule_6_2_7_out
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.7
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.7 | Check Compliant
+  block:
+    - name: Display Output | 6.2.7 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.2.7 |all users' home directories exist|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_7_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_7_out.stdout | length > 0 ) or (rhel7cis_rule_6_2_7_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.2.7 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.7 |all users' home directories exist|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_7_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_7_out.stdout | length == 0) and (rhel7cis_rule_6_2_7_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_6_2_7|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.7
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.8 | PATCH | Ensure users' home directories permissions are 750 or more restrictive"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_8|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.8
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.2.8 | PATCH | Verify users' home directories permissions are 750 or more restrictive"
+  shell: |
+      for dir in `cat /etc/passwd | egrep -v '(root|halt|sync|shutdown)' | awk -F:
+      '($7 != "/sbin/nologin") { print $6 }'`; do
+      dirperm=`ls -ld $dir | cut -f1 -d" "`
+      if [ `echo $dirperm | cut -c6` != "-" ]; then
+        echo "Group Write permission set on directory $dir"
+      fi
+      if [ `echo $dirperm | cut -c8` != "-" ]; then
+        echo "Other Read permission set on directory $dir"
+      fi
+      if [ `echo $dirperm | cut -c9` != "-" ]; then
+        echo "Other Write permission set on directory $dir"
+      fi
+      if [ `echo $dirperm | cut -c10` != "-" ]; then
+        echo "Other Execute permission set on directory $dir"
+      fi
+      done
+  register: rhel7cis_rule_6_2_8_out
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.8
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.8 | Check Compliant
+  block:
+    - name: Display Output | 6.2.8 | When Not Compliant
+      debug: 
+        msg="NOT_COMPLIANT|CIS_RESULT| 6.2.8 |users' home directories permissions are 750 or more restrictive|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_8_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_8_out.stdout | length > 0 ) or (rhel7cis_rule_6_2_8_out.stderr | length > 0 )
+    
+    - name: Display Output | 6.2.8 | When Compliant
+      debug: 
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.8 |users' home directories permissions are 750 or more restrictive|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_8_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_8_out.stdout | length == 0) and (rhel7cis_rule_6_2_8_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_6_2_8|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.8
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.9 | PATCH | Ensure users own their home directories"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_9|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.9
+      - notimplemented
+#***********************************************************************************************
+- name: Display Output | 6.2.9 | When Not Implemented
+  debug: 
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 6.2.9 |users own their home directories|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_6_2_9|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.9
+      - notimplemented
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_10|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.2.10 | PATCH | Ensure users' dot files are not group or world writable"
+  shell: |
+      for dir in `cat /etc/passwd | egrep -v '(root|sync|halt|shutdown)' | awk -F: '($7 != "/sbin/nologin") { print $6 }'`; do
+        for file in $dir/.[A-Za-z0-9]*; do
+          if [ ! -h "$file" -a -f "$file" ]; then
+            fileperm=`ls -ld $file | cut -f1 -d" "`
+            if [ `echo $fileperm | cut -c6` != "-" ]; then
+              echo "Group Write permission set on file $file"
+            fi
+            if [ `echo $fileperm | cut -c9` != "-" ]; then
+              echo "Other Write permission set on file $file"
+            fi
+          fi
+        done
+      done
+
+  register: rhel7cis_rule_6_2_10_out
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_10|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.10 | Check Compliant
+  block:
+    - name: Display Output | 6.2.10 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.10 |users' dot files are not group or world writable|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_10_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_10_out.stdout | length > 0) or (rhel7cis_rule_6_2_10_out.stderr | length > 0)
+    
+    - name: Display Output | 6.2.10 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.10 |users' dot files are not group or world writable|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_10_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_10_out.stdout | length == 0) and (rhel7cis_rule_6_2_10_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_10|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.10
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.11 | PATCH | Ensure no users have .forward files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.forward"
+  with_items: "{{ users.stdout_lines }}"
+  when:
+      - rhel7cis_rule_6_2_11|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.11
+#***********************************************************************************************
+- name: "SCORED | 6.2.11 | PATCH | Verify  no users have .forward files"
+  shell: for h in $(/bin/awk -F':' '$7 !~ /\/sbin\/nologin/ && $7 !~ /\/bin\/false/ { print $6 }' /etc/passwd); do if [[ -f $h/.forward && -s $h/.forward ]]; then echo $h; fi ; done
+  register: rhel7cis_rule_6_2_11_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_11_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.11
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.11 | Check Compliant
+  block:
+    - name: Display Output | 6.2.11 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.11 |No Users Have .forward Files|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_11_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_11_out.stdout | length > 0) or (rhel7cis_rule_6_2_11_out.stderr | length > 0)
+    
+    - name: Display Output | 6.2.11 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.11 |No Users Have .forward Files|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_11_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_11_out.stdout | length == 0) and (rhel7cis_rule_6_2_11_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_11|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.11
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.12 | PATCH | Ensure no users have .netrc files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.netrc"
+  with_items: "{{ users.stdout_lines }}"
+  when:
+      - rhel7cis_rule_6_2_12|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.12
+#***********************************************************************************************
+- name: "SCORED | 6.2.12 | PATCH | Verify no users have .netrc files"
+  shell: for h in $(/bin/awk -F':' '$7 !~ /\/sbin\/nologin/ && $7 !~ /\/bin\/false/ { print $6 }' /etc/passwd); do if [[ -f $h/.netrc && -s $h/.netrc ]]; then echo $h; fi ; done
+  register: rhel7cis_rule_6_2_12_out
+  changed_when: no
+  ignore_errors: yes
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_12_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.12
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.12 | Check Compliant
+  block:
+    - name: Display Output | 6.2.12 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.12 |No Users Have .netrc Files|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_12_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_12_out.stdout | length > 0) or (rhel7cis_rule_6_2_12_out.stderr | length > 0)
+
+    - name: Display Output | 6.2.12 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.12 |No Users Have .netrc Files|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_12_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_12_out.stdout | length == 0) and (rhel7cis_rule_6_2_12_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_12|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.12
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+# - name: "SCORED | 6.2.13 | PATCH | Ensure users' .netrc Files are not group or world accessible"
+#   file:
+#       mode: 0600
+#       dest: "~{{ item }}/.netrc"
+#   with_items: "{{ users.stdout_lines }}"
+#   tags:
+#       - level1
+#       - level2
+#       - patch
+#       - rule_6.2.13
+#***********************************************************************************************
+- name: Display Output | 6.2.13 | When Not Implemented
+  debug: 
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 6.2.13 |Users .netrc Files Are Not Group Or World Accessible|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.13
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+#Commented out  because source has it commented out
+#***********************************************************************************************
+#- name: "SCORED | 6.2.13 | PATCH | Verify users .netrc Files are not group or world accessible-Deleted"
+  #shell: for h in $(/bin/awk -F':' '$7 !~ /\/sbin\/nologin/ && $7 !~ /\/bin\/false/ { print $6 }' /etc/passwd); do if [[ -f $h/.netrc && -s $h/.netrc ]]; then echo $h; fi ; done
+  #register: rhel7cis_rule_6_2_13_out
+  #ignore_errors: yes
+  #failed_when: "'FAILED' in rhel7cis_rule_6_2_13_out.stderr"
+  #when:
+      #- rhel7cis_rule_6_2_13|bool
+  #tags:
+      #- level1
+      #- level2
+      #- patch
+      #- rule_6.2.13
+      #- customcheck
+#***********************************************************************************************
+#Commented out  because source has it commented out
+#***********************************************************************************************
+#- name: Display Output | 6.2.13 | When Not Compliant
+  #debug: 
+      #msg="NOT_COMPLIANT|CIS_RESULT| 6.2.13 |Users .netrc Files Are Not Group Or World Accessible|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_13_out.stdout_lines}}"
+  #when: (rhel7cis_rule_6_2_13_out.stdout | length > 0) or (rhel7cis_rule_6_2_13_out.stderr | length > 0)
+#
+#- name: Display Output | 6.2.13 | When Compliant
+  #debug: 
+      #msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.13 |Users .netrc Files Are Not Group Or World Accessible|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_13_out.stdout_lines}}"
+  #when: (rhel7cis_rule_6_2_13_out.stdout | length == 0) and (rhel7cis_rule_6_2_13_out.stderr | length == 0)
+#***********************************************************************************************
+- name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
+  file:
+      state: absent
+      dest: "~{{ item }}/.rhosts"
+  with_items: "{{ users.stdout_lines }}"
+  when:
+      - rhel7cis_rule_6_2_14|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.14
+#***********************************************************************************************
+- name: "SCORED | 6.2.14 | PATCH | Ensure no users have .rhosts files"
+  shell: |
+      for dir in `cat /etc/passwd | egrep -v '(root|halt|sync|shutdown)' | awk -F: '($7 != "/sbin/nologin") { print $6 }'`; do
+        for file in $dir/.rhosts; do
+          if [ ! -h "$file" -a -f "$file" ]; then
+            echo ".rhosts file in $dir"
+          fi
+        done
+      done
+  register: rhel7cis_rule_6_2_14_out
+  ignore_errors: yes
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_14_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_14|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.14
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.14 | Check Compliant
+  block:
+    - name: Display Output | 6.2.14 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.14 |No Users Have .forward Files|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_14_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_14_out.stdout | length > 0) or (rhel7cis_rule_6_2_14_out.stderr | length > 0)
+
+    - name: Display Output | 6.2.14 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.14 |No Users Have .forward Files|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_14_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_14_out.stdout | length == 0) and (rhel7cis_rule_6_2_14_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_14|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.14
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+#***********************************************************************************************
+- name: "SCORED | 6.2.15 | PATCH | Ensure all groups in /etc/passwd exist in /etc/group"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_15|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.15
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.2.15 | PATCH | Verify  all groups in /etc/passwd exist in /etc/group"
+  shell: |
+     for i in $(cut -s -d: -f4 /etc/passwd | sort -u ); do
+       grep -q -P "^.*?:[^:]*:$i:" /etc/group
+       if [ $? -ne 0 ]; then
+         echo "Group $i is referenced by /etc/passwd but does not exist in /etc/group"
+       fi
+     done
+  changed_when: no
+  register: rhel7cis_rule_6_2_15_out
+  when:
+      - rhel7cis_rule_6_2_15|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.15
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.15 | When Not Implemented
+  debug: 
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 6.2.15 |All Groups In /etc/passwd Exist In /etc/group|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_6_2_15|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.15
+      - notimplemented
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.16 | PATCH | Ensure no duplicate UIDs exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_16|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.16
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.2.16 | PATCH | Verify no duplicate UIDs exist"
+  shell: for dupeID in  $(cut -f3 -d":" /etc/passwd | sort | uniq -c | sort -n | awk ' $1 > 1 {print $2}'); do awk -F':' -v dupeid=$dupeID '$3 == dupeid {print $1}' /etc/passwd   ; done
+  register: rhel7cis_rule_6_2_16_out
+  ignore_errors: yes
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_16_out.stderr"
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_16|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.16
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.16 | Check Compliant
+  block:
+    - name: Display Output | 6.2.16 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.16 |No Duplicate UIDs Exist|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_16_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_16_out.stdout | length > 0) or (rhel7cis_rule_6_2_16_out.stderr | length > 0)
+    
+    - name: Display Output | 6.2.16 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.16 |No Duplicate UIDs Exist|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_16_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_16_out.stdout | length == 0) and (rhel7cis_rule_6_2_16_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_16|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.16
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.17 | PATCH | Ensure no duplicate GIDs exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_17|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.17
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.2.17 | PATCH | Verify no duplicate GIDs exist"
+  shell: for dupeID in  $(cut -f3 -d":" /etc/group | sort | uniq -c | sort -n | awk ' $1 > 1 {print $2}'); do awk -F':' -v dupeid=$dupeID '$3 == dupeid {print $1}' /etc/group   ; done
+  register: rhel7cis_rule_6_2_17_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_17_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_17|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.17
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.17 | Check Compliant
+  block:
+    - name: Display Output | 6.2.17 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.17 |No Duplicate GIDs Exist|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_17_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_17_out.stdout | length > 0) or (rhel7cis_rule_6_2_17_out.stderr | length > 0)
+
+    - name: Display Output | 6.2.17 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.17 |No Duplicate GIDs Exist|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_17_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_17_out.stdout | length == 0) and (rhel7cis_rule_6_2_17_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_17|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.17
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.18 | PATCH | Ensure no duplicate user names exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_18|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.18
+      - notimplemented
+#***********************************************************************************************
+- name: "SCORED | 6.2.18 | PATCH | Verify no duplicate user names exist"
+  shell: cut -f1 -d':' /etc/passwd | sort | uniq -c | sort -n | awk ' $1 > 1 {print $2}'
+  register: rhel7cis_rule_6_2_18_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_18_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_18|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.18
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.18 | Check Compliant
+  block:
+    - name: Display Output | 6.2.18 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.18 |No Duplicate User Names Exist|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_18_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_18_out.stdout | length > 0) or (rhel7cis_rule_6_2_18_out.stderr | length > 0)
+    
+    - name: Display Output | 6.2.18 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.18 |No Duplicate User Names Exist|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_18_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_18_out.stdout | length == 0) and (rhel7cis_rule_6_2_18_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_18|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.18
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: "SCORED | 6.2.19 | PATCH | Ensure no duplicate group names exist"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_6_2_19|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.19
+#***********************************************************************************************
+- name: "SCORED | 6.2.19 | PATCH | Verify no duplicate group names exist"
+  shell: cut -f1 -d':' /etc/group | sort | uniq -c | sort -n | awk ' $1 > 1 {print $2}'
+  register: rhel7cis_rule_6_2_19_out
+  ignore_errors: yes
+  changed_when: no
+  failed_when: "'FAILED' in rhel7cis_rule_6_2_19_out.stderr"
+  when:
+      - rhel7cis_rule_6_2_19|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.19
+      - customcheck
+  check_mode: no
+#***********************************************************************************************
+- name: Display Output | 6.2.19 | Check Compliant
+  block:
+    - name: Display Output | 6.2.19 | When Not Compliant
+      debug: 
+          msg="NOT_COMPLIANT|CIS_RESULT| 6.2.19 |No Duplicate Group Names Exist|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_6_2_19_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_19_out.stdout | length > 0) or (rhel7cis_rule_6_2_19_out.stderr | length > 0)
+    
+    - name: Display Output | 6.2.19 | When Compliant
+      debug: 
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 6.2.19 |No Duplicate Group Names Exist|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_6_2_19_out.stdout_lines}}"
+      when: (rhel7cis_rule_6_2_19_out.stdout | length == 0) and (rhel7cis_rule_6_2_19_out.stderr | length == 0)
+  when:
+      - rhel7cis_rule_6_2_19|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_6.2.19
+      - customcheck
+  check_mode: no
+#***********************************************************************************************

@@ -1,0 +1,1383 @@
+- name: "NOTSCORED | 4.1.1.1 | PATCH | Ensure audit log storage size is configured"
+  lineinfile:
+      dest: /etc/audit/auditd.conf
+      regexp: "^max_log_file( |=)"
+      line: "max_log_file = 10"
+      state: present
+  register:  rhel7cis_rule_4_1_1_1_out
+  when:
+      - rhel7cis_rule_4_1_1_1|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.1
+
+#*********************************************************************************
+- name: Display Output | 4.1.1.1 | Check Compliant
+  block:
+    - name: Display Output | 4.1.1.1 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.1.1 |audit log storage size is configured|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_1_out.changed}}"
+      when:
+          rhel7cis_rule_4_1_1_1_out.changed
+    - name: Display Output | 4.1.1.1 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.1.1 |audit log storage size is configured|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_1_out.changed}}"
+      when:
+          not  rhel7cis_rule_4_1_1_1_out.changed
+  when:
+      - rhel7cis_rule_4_1_1_1|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.1
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.1.2 | PATCH | Ensure system is disabled when audit logs are full"
+  lineinfile:
+      dest: /etc/audit/auditd.conf
+      regexp: "^admin_space_left_action"
+      line: "admin_space_left_action = {{ rhel7cis_auditd['admin_space_left_action'] }}"
+      state: present
+  register:  rhel7cis_rule_4_1_1_2a_out
+  when:
+      - rhel7cis_rule_4_1_1_2|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.2
+
+#*********************************************************************************
+- name: Display Output | 4.1.1.2 | Check Compliant
+  block:
+    - name: Display Output | 4.1.1.2 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.1.2 |system is disabled when audit logs are full|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_2a_out.changed}}"
+      when:
+          rhel7cis_rule_4_1_1_2a_out.changed
+    - name: Display Output | 4.1.1.2 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.1.2 |system is disabled when audit logs are full|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_2a_out.changed}}"
+      when:
+          not  rhel7cis_rule_4_1_1_2a_out.changed
+  when:
+      - rhel7cis_rule_4_1_1_2|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.2
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.1.2 | PATCH | Ensure email on non-admin audit space alert"
+  lineinfile:
+      dest: /etc/audit/auditd.conf
+      regexp: "^space_left_action"
+      line: "space_left_action = email"
+      state: present
+  register:  rhel7cis_rule_4_1_1_2b_out
+  when:
+      - rhel7cis_rule_4_1_1_2|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.2
+
+#*********************************************************************************
+- name: Display Output | 4.1.1.2 | Check Compliant
+  block:
+    - name: Display Output | 4.1.1.2 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.1.2 |email on non-admin audit space alert|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_2b_out.changed}}"
+      when:
+          rhel7cis_rule_4_1_1_2b_out.changed
+    - name: Display Output | 4.1.1.2 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.1.2 |email on non-admin audit space alert|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_2b_out.changed}}"
+      when:
+          not  rhel7cis_rule_4_1_1_2b_out.changed
+  when:
+      - rhel7cis_rule_4_1_1_2|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.2
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.1.3 | PATCH | Ensure audit logs are not automatically deleted"
+  lineinfile:
+      dest: /etc/audit/auditd.conf
+      regexp: "^max_log_file_action"
+      line: "max_log_file_action = {{ rhel7cis_auditd['max_log_file_action'] }}"
+      state: present
+  register:  rhel7cis_rule_4_1_1_3_out
+  when:
+      - rhel7cis_rule_4_1_1_3|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.3
+
+#*********************************************************************************
+- name: Display Output | 4.1.1.3 | Check Compliant
+  block:
+    - name: Display Output | 4.1.1.3 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.1.3 |audit logs are not automatically deleted|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_3_out.changed}}"
+      when:
+          rhel7cis_rule_4_1_1_3_out.changed
+    - name: Display Output | 4.1.1.3 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.1.3 |audit logs are not automatically deleted|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_1_3_out.changed}}"
+      when:
+          not  rhel7cis_rule_4_1_1_3_out.changed
+  when:
+      - rhel7cis_rule_4_1_1_3|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.1.3
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.2 | PATCH | Ensure auditd service is enabled"
+  service:
+      name: auditd
+      state: started
+      enabled: yes
+  register:  rhel7cis_rule_4_1_2_out
+  when:
+      - rhel7cis_skip_for_travis == false
+      - rhel7cis_rule_4_1_2|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.2
+
+#*********************************************************************************
+- name: Display Output | 4.1.2 | Check Compliant
+  block:
+    - name: Display Output | 4.1.2 | When Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.2 |auditd service is enabled|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_2_out.enabled}}"
+      when:
+          rhel7cis_rule_4_1_2_out.changed
+    - name: Display Output | 4.1.2 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.2 |auditd service is enabled|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_2_out.enabled}}"
+      when:
+          not  rhel7cis_rule_4_1_2_out.changed
+  when:
+      - rhel7cis_skip_for_travis == false
+      - rhel7cis_rule_4_1_2|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.2
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.3 | PATCH | Ensure auditing for processes that start prior to auditd is enabled"
+  replace:
+      dest: /etc/default/grub
+      regexp: '(^GRUB_CMDLINE_LINUX\s*\=\s*)(?:")(.+)(?<!audit=1)(?:")'
+      replace: '\1"\2 audit=1"'
+      follow: yes
+  ignore_errors: yes
+  notify: generate new grub config
+  when:
+      - rhel7cis_rule_4_1_3|bool
+      - not ansible_check_mode
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.3
+
+#*********************************************************************************
+
+- name: "SCORED | 4.1.3 | PATCH | Verify auditing for processes that start prior to auditd is enabled"
+  shell: |
+      grep "^\s*linux" /boot/grub2/grub.cfg | grep -v "audit=1"
+  register:  rhel7cis_rule_4_1_3_out
+  changed_when: no
+  check_mode: no
+  when:
+      - rhel7cis_rule_4_1_3|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.3
+
+#*********************************************************************************
+- name: Display Output | 4.1.3 | When Compliant
+  block:
+    - name: Display Output | 4.1.3 | When Not Compliant
+      debug:
+        msg="NOT_COMPLIANT|CIS_RESULT| 4.1.3 |auditing for processes that start prior to auditd is enabled|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_4_1_3_out.stdout_lines}}"
+      when: (rhel7cis_rule_4_1_3_out.stdout | length > 0 ) or (rhel7cis_rule_4_1_3_out.stderr | length > 0 )
+
+    - name: Display Output | 4.1.3 | When Compliant
+      debug:
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.3 |auditing for processes that start prior to auditd is enabled|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_4_1_3_out.stdout_lines}}"
+      when: (rhel7cis_rule_4_1_3_out.stdout | length == 0) and (rhel7cis_rule_4_1_3_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_4_1_3|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.3
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.4 | PATCH | Ensure events that modify date and time information are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_4.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_4.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_4_out
+  when:
+      - rhel7cis_rule_4_1_4|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.4
+
+#*********************************************************************************
+- name: Display Output | 4.1.4 | Check Compliant
+  block:
+    - name: Display Output | 4.1.4 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.4 |events that modify date and time information are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_4_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_4_out.changed
+    - name: Display Output | 4.1.4 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.4 |events that modify date and time information are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_4_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_4_out.changed
+  when:
+      - rhel7cis_rule_4_1_4|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.4
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.5 | PATCH | Ensure events that modify user/group information are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_5.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_5.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_5_out
+  when:
+      - rhel7cis_rule_4_1_5|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.5
+
+#*********************************************************************************
+- name: Display Output | 4.1.5 | Check Compliant
+  block:
+    - name: Display Output | 4.1.5 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.5 |events that modify user/group information are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_5_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_5_out.changed
+    - name: Display Output | 4.1.5 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.5 |events that modify user/group information are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_5_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_5_out.changed
+  when:
+      - rhel7cis_rule_4_1_5|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.5
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.6 | PATCH | Ensure events that modify the system's network environment are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_6.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_6.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_6_out
+  when:
+      - rhel7cis_rule_4_1_6|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.6
+
+#*********************************************************************************
+- name: Display Output | 4.1.6 | Check Compliant
+  block:
+    - name: Display Output | 4.1.6 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.6 |events that modify the system's network environment are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_6_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_6_out.changed
+    - name: Display Output | 4.1.6 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.6 |events that modify the system's network environment are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_6_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_6_out.changed
+  when:
+      - rhel7cis_rule_4_1_6|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.6
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.7 | PATCH | Ensure events that modify the system's Mandatory Access Controls are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_7.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_7.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_7_out
+  when:
+      - rhel7cis_rule_4_1_7|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.7
+
+#*********************************************************************************
+- name: Display Output | 4.1.7 | Check Compliant
+  block:
+    - name: Display Output | 4.1.7 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.7 |events that modify the system's Mandatory Access Controls are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_7_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_7_out.changed
+    - name: Display Output | 4.1.7 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.7 |events that modify the system's Mandatory Access Controls are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_7_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_7_out.changed
+  when:
+      - rhel7cis_rule_4_1_7|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.7
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.8 | PATCH | Ensure login and logout events are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_8.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_8.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_8_out
+  when:
+      - rhel7cis_rule_4_1_8|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.8
+
+#*********************************************************************************
+- name: Display Output | 4.1.8 | Check Compliant
+  block:
+    - name: Display Output | 4.1.8 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.8 |login and logout events are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_8_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_8_out.changed
+    - name: Display Output | 4.1.8 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.8 |login and logout events are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_8_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_8_out.changed
+  when:
+      - rhel7cis_rule_4_1_8|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.8
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.9 | PATCH | Ensure session initiation information is collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_9.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_9.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_9_out
+  when:
+      - rhel7cis_rule_4_1_9|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.9
+
+#*********************************************************************************
+- name: Display Output | 4.1.9 | Check Compliant
+  block:
+  - name: Display Output | 4.1.9 | When Not Compliant
+    debug:
+        msg="NOT_COMPLIANT|CIS_RESULT| 4.1.9 |session initiation information is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_9_out.changed}}"
+    when:
+         rhel7cis_rule_4_1_9_out.changed
+  - name: Display Output | 4.1.9 | When Compliant
+    debug:
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.9 |session initiation information is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_9_out.changed}}"
+    when:
+         not rhel7cis_rule_4_1_9_out.changed
+  when:
+      - rhel7cis_rule_4_1_9|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.9
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.10 | PATCH | Ensure discretionary access control permission modification events are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_10.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_10.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_10_out
+  when:
+      - rhel7cis_rule_4_1_10|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.10
+
+#*********************************************************************************
+- name: Display Output | 4.1.10 | Check Compliant
+  block:
+    - name: Display Output | 4.1.10 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.10 |discretionary access control permission modification events are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_10_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_10_out.changed
+    - name: Display Output | 4.1.10 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.10 |discretionary access control permission modification events are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_10_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_10_out.changed
+  when:
+      - rhel7cis_rule_4_1_10|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.10
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.11 | PATCH | Ensure unsuccessful unauthorized file access attempts are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_11.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_11.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_11_out
+  when:
+      - rhel7cis_rule_4_1_11|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.11
+
+#*********************************************************************************
+- name: Display Output | 4.1.11 | Check Compliant
+  block:
+    - name: Display Output | 4.1.11 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.11 |unsuccessful unauthorized file access attempts are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_11_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_11_out.changed
+    - name: Display Output | 4.1.11 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.11 |unsuccessful unauthorized file access attempts are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_11_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_11_out.changed
+  when:
+      - rhel7cis_rule_4_1_11|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.11
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.12 | PATCH | Ensure use of privileged commands is collected"
+  shell: for i in  $(df | grep '^/dev' | awk '{ print $NF }'); do find $i -xdev -type f -perm -4000 -o -type f -perm -2000 2>/dev/null; done
+  register: priv_procs
+  changed_when: no
+  check_mode: no
+  when:
+      - rhel7cis_rule_4_1_12|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.12
+
+#*********************************************************************************
+- name: Display Output | 4.1.12 | When Compliant
+  block:
+    - name: Display Output | 4.1.12 | When Not Compliant
+      debug:
+        msg="NOT_COMPLIANT|CIS_RESULT| 4.1.12 |use of privileged commands is collected|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{priv_procs.stdout_lines}}"
+      when: (priv_procs.stdout | length > 0 ) or (priv_procs.stderr | length > 0 )
+
+    - name: Display Output | 4.1.12 | When Compliant
+      debug:
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.12 |use of privileged commands is collected|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{priv_procs.stdout_lines}}"
+      when: (priv_procs.stdout | length == 0) and (priv_procs.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_4_1_12|bool
+  tags:
+      - level2
+      - auditd
+      - rule_4.1.12
+      - patch
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.12 | PATCH | Ensure use of privileged commands is collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_12.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_12.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_12_out
+  notify: restart auditd
+  when:
+      - rhel7cis_rule_4_1_12|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.12
+
+#*********************************************************************************
+- name: Display Output | 4.1.12 | Check Compliant
+  block:
+    - name: Display Output | 4.1.12 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.12 |use of privileged commands is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_12_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_12_out.changed
+    - name: Display Output | 4.1.12 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.12 |use of privileged commands is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_12_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_12_out.changed
+  when:
+      - rhel7cis_rule_4_1_12|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.12
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.13 | PATCH | Ensure successful file system mounts are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_13.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_13.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_13_out
+  when:
+      - rhel7cis_rule_4_1_13|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.13
+
+#*********************************************************************************
+- name: Display Output | 4.1.13 | Check Compliant
+  block:
+    - name: Display Output | 4.1.13 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.13 |successful file system mounts are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_13_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_13_out.changed
+    - name: Display Output | 4.1.13 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.13 |successful file system mounts are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_13_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_13_out.changed
+  when:
+      - rhel7cis_rule_4_1_13|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.13
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.14 | PATCH | Ensure file deletion events by users are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_14.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_14.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_14_out
+  when:
+      - rhel7cis_rule_4_1_14|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.14
+
+#*********************************************************************************
+- name: Display Output | 4.1.14 | Check Compliant
+  block:
+    - name: Display Output | 4.1.14 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.14 |file deletion events by users are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_14_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_14_out.changed
+    - name: Display Output | 4.1.14 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.14 |file deletion events by users are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_14_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_14_out.changed
+  when:
+      - rhel7cis_rule_4_1_14|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.14
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.15 | PATCH | Ensure changes to system administration scope (sudoers) is collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_15.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_15.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_15_out
+  when:
+      - rhel7cis_rule_4_1_15|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.15
+
+#*********************************************************************************
+- name: Display Output | 4.1.15 | Check Compliant
+  block:
+    - name: Display Output | 4.1.15 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.15 |changes to system administration scope (sudoers) is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_15_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_15_out.changed
+    - name: Display Output | 4.1.15 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.15 |changes to system administration scope (sudoers) is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_15_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_15_out.changed
+  when:
+      - rhel7cis_rule_4_1_15|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.15
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.16 | PATCH | Ensure system administrator actions (sudolog) are collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_16.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_16.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_16_out
+  when:
+      - rhel7cis_rule_4_1_16|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.16
+
+#*********************************************************************************
+- name: Display Output | 4.1.16 | Check Compliant
+  block:
+    - name: Display Output | 4.1.16 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.16 |system administrator actions (sudolog) are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_16_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_16_out.changed
+    - name: Display Output | 4.1.16 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.16 |system administrator actions (sudolog) are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_16_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_16_out.changed
+  when:
+      - rhel7cis_rule_4_1_16|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.16
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.17 | PATCH | Ensure kernel module loading and unloading is collected"
+  template:
+      src: audit/rhel7cis_rule_4_1_17.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_17.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_17_out
+  when:
+      - rhel7cis_rule_4_1_17|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.17
+
+#*********************************************************************************
+- name: Display Output | 4.1.17 | Check Compliant
+  block:
+    - name: Display Output | 4.1.17 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.17 |kernel module loading and unloading is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_17_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_17_out.changed
+    - name: Display Output | 4.1.17 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.17 |kernel module loading and unloading is collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_17_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_17_out.changed
+  when:
+      - rhel7cis_rule_4_1_17|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.17
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.1.18 | PATCH | Ensure the audit configuration is immutable"
+  template:
+      src: audit/rhel7cis_rule_4_1_18.rules.j2
+      dest: /etc/audit/rules.d/rhel7cis_rule_4_1_18.rules
+      owner: root
+      group: root
+      mode: 0600
+  register:  rhel7cis_rule_4_1_18_out
+  when:
+      - rhel7cis_rule_4_1_18|bool
+  notify: restart auditd
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.18
+
+#*********************************************************************************
+- name: Display Output | 4.1.18 | Check Compliant
+  block:
+    - name: Display Output | 4.1.18 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.1.18 |system administrator actions (sudolog) are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_18_out.changed}}"
+      when:
+           rhel7cis_rule_4_1_18_out.changed
+    - name: Display Output | 4.1.18 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.1.18 |system administrator actions (sudolog) are collected|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_1_18_out.changed}}"
+      when:
+           not rhel7cis_rule_4_1_18_out.changed
+  when:
+      - rhel7cis_rule_4_1_18|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - rule_4.1.18
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.2.3 | PATCH | Ensure rsyslog or syslog-ng is installed"
+  yum:
+      name: "{{ rhel7cis_syslog }}"
+      state: present
+  register:  rhel7cis_rule_4_2_3_out
+  when:
+      - rhel7cis_rule_4_2_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.3
+
+#*********************************************************************************
+- name: Display Output | 4.2.3 | Check Compliant
+  block:
+    - name: Display Output | 4.2.3 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.2.3 |rsyslog or syslog-ng is installed|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_2_3_out.changed}}"
+      when:
+           rhel7cis_rule_4_2_3_out.changed
+    - name: Display Output | 4.2.3 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.2.3 |rsyslog or syslog-ng is installed|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_2_3_out.changed}}"
+      when:
+           not rhel7cis_rule_4_2_3_out.changed
+  when:
+      - rhel7cis_rule_4_2_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.3
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog Service is enabled"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_1_1|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.1
+      - notimplemented
+
+#*********************************************************************************
+
+- name: "SCORED | 4.2.1.1 | PATCH | Ensure rsyslog Service is enabled"
+  shell: |
+      systemctl is-enabled rsyslog | grep enabled
+  register:  rhel7cis_rule_4_2_1_1_out
+  failed_when: no
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_1_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.1
+      - customcheck
+  check_mode: no
+
+#*********************************************************************************
+- name: Display Output | 4.2.1.1 | Check Compliant
+  block:
+    - name: Display Output | 4.2.1.1 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.2.1.1 |rsyslog Service is enabled|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_4_2_1_1_out.changed}}"
+      when: (rhel7cis_rule_4_2_1_1_out.stdout | length == 0) or (rhel7cis_rule_4_2_1_1_out.stderr | length > 0 )
+    - name: Display Output | 4.2.1.1 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.2.1.1 |rsyslog Service is enabled|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_4_2_1_1_out.changed}}"
+      when: (rhel7cis_rule_4_2_1_1_out.stdout | length > 0 ) and (rhel7cis_rule_4_2_1_1_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_4_2_1_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.1
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.2.1.2 | PATCH | Ensure logging is configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_1_2|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.2
+      - notimplemented
+
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.2.1.2 | PATCH | Ensure logging is configured"
+  shell: |
+      cat /etc/rsyslog.conf
+      ls -l /var/log/
+  register: rhel7cis_rule_4_2_1_2_out
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.2
+      - customcheck
+  check_mode: no
+
+#*********************************************************************************
+- name: Display Output | 4.2.1.2 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.1.2 |logging is configured|{{ansible_hostname}}|MANUAL_VERIFICATION_REQUIRED|{{rhel7cis_rule_4_2_1_2_out.stdout}}"
+  when:
+      - rhel7cis_rule_4_2_1_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.2
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.2.1.3 | PATCH | Ensure rsyslog default file permissions configured"
+  lineinfile:
+      dest: /etc/rsyslog.conf
+      regexp: '^\$FileCreateMode'
+      line: '$FileCreateMode 0640'
+  register:  rhel7cis_rule_4_2_1_3_out
+  when:
+      - rhel7cis_rule_4_2_1_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.3
+
+#*********************************************************************************
+- name: Display Output | 4.2.1.3 | Check Compliant
+  block:
+    - name: Display Output | 4.2.1.3 | When Not Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.2.1.3 |rsyslog default file permissions configured|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_2_1_3_out.changed}}"
+      when:
+          rhel7cis_rule_4_2_1_3_out.changed
+    - name: Display Output | 4.2.1.3 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.2.1.3 |rsyslog default file permissions configured|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_2_1_3_out.changed}}"
+      when:
+          not rhel7cis_rule_4_2_1_3_out.changed
+  when:
+      - rhel7cis_rule_4_2_1_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.3
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.2.1.4 | PATCH | Ensure rsyslog is configured to send logs to a remote log host"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_1_4|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.4
+      - notimplemented
+
+#*********************************************************************************
+- name: Display Output | 4.2.1.4 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.1.4 |rsyslog is configured to send logs to a remote log host|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_4_2_1_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.4
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.2.1.5 | PATCH | Ensure remote rsyslog messages are only accepted on designated log hosts."
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_1_5|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.5
+      - notimplemented
+
+#*********************************************************************************
+
+- name: Display Output | 4.2.1.5 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.1.5 |remote rsyslog messages are only accepted on designated log hosts|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_4_2_1_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.1.5
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+
+- name: "SCORED | 4.2.2.1 | PATCH | Ensure syslog-ng service is enabled"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_2_1|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.1
+      - notimplemented
+
+#*********************************************************************************
+- name: Display Output | 4.2.2.1 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.2.1 | syslog-ng service is enabled|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_4_2_2_1|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.1
+      - notimplemented
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.2.2.2 | PATCH | Ensure logging is configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_2_2|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.2
+      - notimplemented
+
+#*********************************************************************************
+- name: Display Output | 4.2.2.2 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.2.2 |logging is configured|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_4_2_2_2|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.2
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "SCORED | 4.2.2.3 | PATCH | Ensure syslog-ng default file permissions configured"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_2_3|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.3
+      - notimplemented
+
+#*********************************************************************************
+- name: Display Output | 4.2.2.3 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.2.3 |syslog-ng default file permissions configured|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_4_2_2_3|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.3
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.2.2.4 | PATCH | Ensure syslog-ng is configured to send logs to a remote log host"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_2_4|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.4
+      - notimplemented
+
+#*********************************************************************************
+- name: Display Output | 4.2.2.4 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.2.4 |syslog-ng is configured to send logs to a remote log host|{{ansible_hostname}}|NOT_AUTOMATED|SKIPPED"
+  when:
+      - rhel7cis_rule_4_2_2_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.4
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.2.2.5 | PATCH | Ensure remote syslog-ng messages are only accepted on designated log hosts"
+  command: /bin/true
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_2_5|bool
+      - not ansible_check_mode
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.5
+      - notimplemented
+
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.2.2.5 | PATCH | Verify remote syslog-ng messages are only accepted on designated log hosts"
+  shell: |
+      rpm -q rsyslog
+      rpm -q syslog-ng
+  register: rhel7cis_rule_4_2_2_5_out
+  failed_when: no
+  changed_when: no
+  when:
+      - rhel7cis_rule_4_2_2_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.5
+      - customcheck
+  check_mode: no
+
+#*********************************************************************************
+- name: Display Output | 4.2.2.5 | When Compliant
+  debug:
+      msg="MANUAL_CHECK_REQUIRED|CIS_RESULT| 4.2.2.5 |remote syslog-ng messages are only accepted on designated log hosts|{{ansible_hostname}}|MANUAL_VERIFICATION_REQUIRED|{{rhel7cis_rule_4_2_2_5_out.stdout}}"
+  when:
+      - rhel7cis_rule_4_2_2_5|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.2.5
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+#4.2.4 Will Fail Display Output if Check Mode is disabled
+#*********************************************************************************
+- name: "SCORED | 4.2.4 | PATCH | Ensure permissions on all logfiles are configured"
+  command: find /var/log -type f -exec chmod g-wx,o-rwx {} +
+  register: rhel7cis_rule_4_2_4_out
+  changed_when: no
+  failed_when: no
+  when:
+      - rhel7cis_rule_4_2_4|bool
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.2.4
+  check_mode: no
+
+#*********************************************************************************
+#
+- name: Display Output | 4.2.4 | When Compliant
+  block:
+    - name: Display Output | 4.2.4 | When Not Compliant
+      debug:
+        msg="NOT_COMPLIANT|CIS_RESULT| 4.2.4 |permissions on all logfiles are configured|{{ansible_hostname}}|CHANGE_REQUIRED|True|{{rhel7cis_rule_4_2_4_out.stdout_lines}}"
+      when: (rhel7cis_rule_4_2_4_out.stdout | length > 0 ) or (rhel7cis_rule_4_2_4_out.stderr | length > 0 )
+
+    - name: Display Output | 4.2.4 | When Compliant
+      debug:
+        msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.2.4 |permissions on all logfiles are configured|{{ansible_hostname}}|CHANGE_REQUIRED|False|{{rhel7cis_rule_4_2_4_out.stdout_lines}}"
+      when: (rhel7cis_rule_4_2_4_out.stdout | length == 0) and (rhel7cis_rule_4_2_4_out.stderr | length == 0 )
+  when:
+      - rhel7cis_rule_4_2_4|bool
+  tags:
+      - level2
+      - auditd
+      - patch
+      - customcheck
+  check_mode: no
+#*********************************************************************************
+
+- name: "NOTSCORED | 4.3 | PATCH | Ensure logrotate is configured"
+  find:
+    paths: /etc/logrotate.d/
+  register: log_rotates
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.3
+
+- name: "NOTSCORED | 4.3 | PATCH | Ensure logrotate is configured"
+  replace:
+    path: "{{ item.path }}"
+    regexp: '^(\s*)(daily|weekly|monthly|yearly)$'
+    replace: "\\1{{ rhel7cis_logrotate }}"
+  register:  rhel7cis_rule_4_3_out
+  with_items:
+    - "{{ log_rotates.files }}"
+    - { path: "/etc/logrotate.conf" }
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.3
+
+#*********************************************************************************
+- name: Display Output | 4.3 | Check Compliant
+  block:
+    - name: Display Output | 4.3 | When Not Compliant
+      debug:
+          msg="NOT_COMPLIANT|CIS_RESULT| 4.3 | logrotate is configured|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_3_out.changed}}"
+      when:
+          rhel7cis_rule_4_3_out.changed
+    - name: Display Output | 4.3 | When Compliant
+      debug:
+          msg="SUCCESS_COMPLIANT|CIS_RESULT| 4.3 | logrotate is configured|{{ansible_hostname}}|CHANGE_REQUIRED|{{rhel7cis_rule_4_3_out.changed}}"
+      when:
+          not rhel7cis_rule_4_3_out.changed
+  tags:
+      - level1
+      - level2
+      - patch
+      - rule_4.3
+      - customcheck
+  check_mode: no
+#*********************************************************************************

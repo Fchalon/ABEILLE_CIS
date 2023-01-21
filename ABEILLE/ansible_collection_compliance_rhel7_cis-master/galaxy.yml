@@ -1,0 +1,14 @@
+---
+authors:
+- your name here
+dependencies: {}
+description: enter your description here
+issues: https://github.ibm.com/Continuous-Engineering/Ansible-Dynamic-Automation/issues
+license_file: LICENSE.md
+name: collection_name_tbd
+namespace: continuous_engineering
+readme: README.md
+repository: https://github.ibm.com/Continuous-Engineering/your_repo_here
+tags:
+- repocreated
+version: 0.1.0
